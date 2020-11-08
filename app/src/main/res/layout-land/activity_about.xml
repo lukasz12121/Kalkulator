@@ -6,13 +6,35 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="272dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="97dp"
-        android:layout_marginEnd="64dp"
-        android:text="Autor: Łukasz Pawlak"
+        android:id="@+id/textView7"
+        android:layout_width="257dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="332dp"
+        android:text="Author: Łukasz Pawlak"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="258dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginEnd="332dp"
+        android:text="Description: Calculator application including Simple and Advanced functionalities"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="257dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="332dp"
+        android:text="App name: Calculator"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

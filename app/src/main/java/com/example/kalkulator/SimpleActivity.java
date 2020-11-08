@@ -1,44 +1,81 @@
 package com.example.kalkulator;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Stack;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SimpleActivity extends AppCompatActivity{
 
     String str_result = "0";
-    String last_op = " ";
     int c_cnt = 0;
+    String sub_str = "";
+    String vtext = "";
+    String v1text = "";
+    TextView mTextView;
+    TextView mTextView1;
+    private static final String SUB = "sub";
+    private static final String CNT = "cnt";
+    private static final String TEXT = "text";
+    private static final String TEXT1 = "text1";
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("sub", sub_str);
+        savedInstanceState.putInt("cnt",c_cnt);
+        savedInstanceState.putString("text",vtext);
+        savedInstanceState.putString("text1",v1text);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
 
+        if (savedInstanceState != null) {
+            mTextView = (TextView) findViewById(R.id.textView);
+            mTextView1 = (TextView) findViewById(R.id.textView1);
+            Button btn_c = (Button)findViewById(R.id.btn_c);
+            sub_str = savedInstanceState.getString(SUB);
+            c_cnt = savedInstanceState.getInt(CNT);
+            vtext = savedInstanceState.getString(TEXT);
+            v1text = savedInstanceState.getString(TEXT1);
+            mTextView.setText(vtext);
+            mTextView1.setText(v1text);
+            if(c_cnt == 0){
+                btn_c.setText("C");
+            }
+        }
 
         final Button btn_c = (Button)findViewById(R.id.btn_c);
         btn_c.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     TextView tv = (TextView)findViewById(R.id.textView);
-                    c_cnt = c_cnt + 1;
+                    TextView tv1 = (TextView)findViewById(R.id.textView1);
+                    c_cnt= c_cnt + 1;
                     if(c_cnt == 1){
-                        tv.setText("0");
+                        tv.setText("");
                         btn_c.setText("C");
                     }else{
-                        tv.setText("0");
+                        tv.setText("");
+                        tv1.setText("");
                         str_result = "0";
-                        last_op = "";
-                        c_cnt = 0;
-                        btn_c.setText("AC");
+                        sub_str = "";
+                        c_cnt = 3;
+                        btn_c.setText("CE");
                     }
+                    vtext = tv.getText().toString();
+                    v1text = tv1.getText().toString();
                 }
             });
 
@@ -47,14 +84,17 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
                 if(!temp_str.isEmpty()) {
                     temp_str = temp_str.substring(0, tv.length() - 1);
                     tv.setText(temp_str);
                 }
                 if(temp_str.isEmpty()){
-                    tv.setText("0");
+                    tv.setText("");
                 }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -63,6 +103,7 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
                 if(!temp_str.isEmpty()) {
                     if (!temp_str.equals("0")) {
@@ -74,6 +115,8 @@ public class SimpleActivity extends AppCompatActivity{
                     }
                 }
                 tv.setText(temp_str);
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -82,7 +125,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("1");
                 }
@@ -91,6 +136,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -99,7 +149,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("2");
                 }
@@ -108,6 +160,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -116,7 +173,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("3");
                 }
@@ -125,6 +184,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -133,7 +197,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("4");
                 }
@@ -142,6 +208,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -150,7 +221,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("5");
                 }
@@ -159,6 +232,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -167,14 +245,22 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("6");
                 }
                 else {
+                    c_cnt = 0;
                     tv.append("6");
                     btn_c.setText("C");
+                    if(operation_str.contains("=")) {
+                        tv1.setText("");
+                    }
                 }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -183,7 +269,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("7");
                 }
@@ -192,6 +280,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -200,7 +293,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("8");
                 }
@@ -209,6 +304,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -217,7 +317,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 if(temp_str.length() == 1 && temp_str.charAt(0) == '0'){
                     tv.setText("9");
                 }
@@ -226,6 +328,11 @@ public class SimpleActivity extends AppCompatActivity{
                 }
                 c_cnt = 0;
                 btn_c.setText("C");
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -234,28 +341,34 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
+                if(!temp_str.isEmpty()){
+                    if(temp_str.equals("0")){
+                        tv.setText("0");
+                    }else {
+                        tv.append("0");
+                    }
+                }else{
+                    if(operation_str.isEmpty()){
+                        tv.setText("0");
+                    }else {
+                        sub_str = operation_str.substring(operation_str.length() - 2, operation_str.length());
+                        if (sub_str.equals("/ ")) {
+                            zeroDiv();
+                        } else {
+                            tv.setText("0");
+                        }
+                    }
+                }
 
-                boolean flag = false;
-                if(temp_str.isEmpty()){ //wywala się po kliknięciu przycisku gdy texview jest pusty(?)
-                    tv.setText("0");
-                    c_cnt = 0;
+                if(operation_str.contains("=")) {
+                    tv1.setText("");
                 }
-                if (temp_str.contains(".")) {
-                    flag = true;
-                }
-                if((!flag && temp_str.charAt(0) != '0')){
-                    tv.append("0");
-                    c_cnt = 0;
-                }
-                if(flag  && temp_str.charAt(0) != '0'){
-                    tv.append("0");
-                }
-                if(flag  && temp_str.charAt(0) == '0'){
-                    tv.append("0");
-                }
-
                 btn_c.setText("C");
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -264,7 +377,9 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView)findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
+                String operation_str = tv1.getText().toString();
                 char ch = '.';
                 int count = 0;
                 for (int i = 0; i < temp_str.length(); i++) {
@@ -277,10 +392,15 @@ public class SimpleActivity extends AppCompatActivity{
                     c_cnt = 0;
                 }
                 if(temp_str.isEmpty()){
+                    if(!operation_str.isEmpty()) {
+                        sub_str = operation_str.substring(operation_str.length() - 2, operation_str.length());
+                    }
                     tv.setText("0.");
                     c_cnt = 0;
                 }
                 btn_c.setText("C");
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -288,43 +408,32 @@ public class SimpleActivity extends AppCompatActivity{
         btn_add.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView tv = (TextView)findViewById(R.id.textView);
-                String temp_str = tv.getText().toString();
-                if(temp_str == " " || temp_str.isEmpty()){
-                    tv.setText("");
-                    last_op = "+";
-                }else {
-                    float number = Float.parseFloat(temp_str);
-                    float result = Float.parseFloat(str_result);
-                    if (last_op != "+" && last_op != "") {
-                        switch (last_op) {
-                            case "+":
-                                result = result + number;
-                                break;
-                            case "-":
-                                result = result - number;
-                                break;
-                            case "*":
-                                result = result * number;
-                                break;
-                            case "/":
-                                result = result / number;
-                                break;
-                            case "=":
-                                result = result;
-                                break;
-                        }
-                        str_result = String.valueOf(result);
-                        c_cnt = 0;
-                    } else {
-                        result = result + number;
-                        str_result = String.valueOf(result);
-                        c_cnt = 0;
+            TextView tv = (TextView)findViewById(R.id.textView);
+            TextView tv1 = (TextView)findViewById(R.id.textView1);
+            String temp_str = tv.getText().toString();
+            String operation_str = tv1.getText().toString();
+            if(!temp_str.isEmpty()){
+                float num = Float.parseFloat(temp_str);
+                if (!sub_str.equals("/ ")  || Math.signum(num) !=0 ) {
+                    if (operation_str.contains("=")) {
+                        tv1.setText("");
                     }
-                tv.setText("");
-                last_op = "+";
-                btn_c.setText("C");
+                    tv1.append(temp_str + " + ");
+                    c_cnt = 0;
+                    tv.setText("");
+                    btn_c.setText("C");
+                }else{
+                    zeroDiv();
                 }
+
+            }else{
+                if(!operation_str.isEmpty()) {
+                    operation_str = operation_str.substring(0, operation_str.length() - 3);
+                    tv1.setText(operation_str + " + ");
+                }
+            }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -333,98 +442,62 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
-                if (temp_str == " " || temp_str.isEmpty()) {
-                    tv.setText("");
-                    last_op = "-";
-                } else {
-                    float number = Float.parseFloat(temp_str);
-                    float result = Float.parseFloat(str_result);
-                    if (last_op != "-" && last_op != "") {
-                        switch (last_op) {
-                            case "+":
-                                result = result + number;
-                                break;
-                            case "-":
-                                result = result - number;
-                                break;
-                            case "*":
-                                result = result * number;
-                                break;
-                            case "/":
-                                result = result / number;
-                                break;
-                            case "=":
-                                result = result;
-                                break;
+                String operation_str = tv1.getText().toString();
+                if(!temp_str.isEmpty()) {
+                    float num = Float.parseFloat(temp_str);
+                    if (!sub_str.equals("/ ")  || Math.signum(num) !=0 ) {
+                        if (operation_str.contains("=")) {
+                            tv1.setText("");
                         }
-                        str_result = String.valueOf(result);
+                        tv1.append(temp_str + " - ");
                         c_cnt = 0;
-                    } else {
-                        if (str_result.equals("0")) {
-                            str_result = temp_str;
-                            c_cnt = 0;
-                        } else {
-                            result = result - number;
-                            str_result = String.valueOf(result);
-                            c_cnt = 0;
-                        }
+                        tv.setText("");
+                        btn_c.setText("C");
+                    }else{
+                        zeroDiv();
                     }
-                    c_cnt = 0;
-                    tv.setText("");
-                    last_op = "-";
-                    btn_c.setText("C");
+                }else {
+                    if (!operation_str.isEmpty()) {
+                        operation_str = operation_str.substring(0, operation_str.length() - 3);
+                        tv1.setText(operation_str + " - ");
+                    }
                 }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
         Button btn_multi = (Button) findViewById(R.id.btn_multi);
         btn_multi.setOnClickListener(new OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
-                if (temp_str == " " || temp_str.isEmpty()) {
-                    tv.setText("");
-                    last_op = "*";
-                } else {
-                    float number = Float.parseFloat(temp_str);
-                    float result = Float.parseFloat(str_result);
-                    if (last_op != "*" && last_op != "") {
-                        switch (last_op) {
-                            case "+":
-                                result = result + number;
-                                break;
-                            case "-":
-                                result = result - number;
-                                break;
-                            case "*":
-                                result = result * number;
-                                break;
-                            case "/":
-                                result = result / number;
-                                break;
-                            case "=":
-                                result = result;
-                                break;
+                String operation_str = tv1.getText().toString();
+                    if(!temp_str.isEmpty()) {
+                        float num = Float.parseFloat(temp_str);
+                        if (!sub_str.equals("/ ")  || Math.signum(num) !=0 ) {
+                            if (operation_str.contains("=")) {
+                                tv1.setText("");
+                            }
+                            tv1.append(temp_str + " * ");
+                            tv.setText("");
+                            btn_c.setText("C");
+                        }else{
+                            zeroDiv();
                         }
-                        str_result = String.valueOf(result);
-                        c_cnt = 0;
-                    } else {
-                        if (str_result.equals("0")) {
-                            //str_result = "1";
-                            str_result = temp_str;
-                            c_cnt = 0;
-                        } else {
-                            result = result * number;
-                            str_result = String.valueOf(result);
-                            c_cnt = 0;
+                    }else{
+                        if(!operation_str.isEmpty()) {
+                            operation_str = operation_str.substring(0, operation_str.length() - 3);
+                            tv1.setText(operation_str + " * ");
                         }
                     }
-                    tv.setText("");
-                    last_op = "*";
-                    btn_c.setText("C");
-                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -433,50 +506,31 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) findViewById(R.id.textView);
+                TextView tv1 = (TextView)findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
-                if (temp_str == " " || temp_str.isEmpty()) {
-                    tv.setText("");
-                    last_op = "/";
-                } else {
-                    float number = Float.parseFloat(temp_str);
-                    float result = Float.parseFloat(str_result);
-                    if (last_op != "/" && last_op != "") {
-                        switch (last_op) {
-                            case "+":
-                                result = result + number;
-                                break;
-                            case "-":
-                                result = result - number;
-                                break;
-                            case "*":
-                                result = result * number;
-                                break;
-                            case "/":
-                                result = result / number;
-                                break;
-                            case "=":
-                                result = result;
-                                break;
-                        }
-                        str_result = String.valueOf(result);
-                        c_cnt = 0;
-                    } else {
-                        if (str_result.equals("0")) {
-                            str_result = temp_str;
-                            c_cnt = 0;
-                        } else {
-                            result = result / number;
-                            if (number == 0) {
-                                result = 0;
+                String operation_str = tv1.getText().toString();
+                    if(!temp_str.isEmpty()) {
+                        float num = Float.parseFloat(temp_str);
+                        if (!sub_str.equals("/ ")  || Math.signum(num) !=0 ) {
+                            if (operation_str.contains("=")) {
+                            tv1.setText("");
                             }
-                            str_result = String.valueOf(result);
+                            tv1.append(temp_str + " / ");
                             c_cnt = 0;
+                            tv.setText("");
+                            btn_c.setText("C");
+                        }else{
+                            zeroDiv();
+                        }
+
+                    }else{
+                        if(!operation_str.isEmpty()) {
+                            operation_str = operation_str.substring(0, operation_str.length() - 3);
+                            tv1.setText(operation_str + " / ");
                         }
                     }
-                    tv.setText("");
-                    last_op = "/";
-                    btn_c.setText("C");
-                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
 
@@ -485,55 +539,144 @@ public class SimpleActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 TextView tv = (TextView) findViewById(R.id.textView);
+                TextView tv1 = (TextView) findViewById(R.id.textView1);
                 String temp_str = tv.getText().toString();
-                if (temp_str == " " || temp_str.isEmpty()) {
-                    tv.setText("");
-                    last_op = "*";
-                } else {
-                    float number = Float.parseFloat(temp_str);
-                    float result = Float.parseFloat(str_result);
-
-                    switch (last_op) {
-                        case "+":
-                            result = result + number;
-                            break;
-                        case "-":
-                            result = result - number;
-                            break;
-                        case "*":
-                            result = result * number;
-                            break;
-                        case "/":
-                            result = result / number;
-                            break;
+                String operation_str = tv1.getText().toString();
+                String str = "";
+                if (!temp_str.isEmpty()) {
+                    if(!operation_str.isEmpty() && temp_str.length() != 1) {
+                        str = operation_str.substring(operation_str.length() - 2, operation_str.length());
                     }
-                    float modulo = result % 1;
+                    float num = Float.parseFloat(temp_str);
+                    if (!sub_str.equals("/ ")  || Math.signum(num) !=0 ) {
+                    if (temp_str == " " || temp_str.isEmpty()) {
+                        tv.setText("");
+                    }
+                    if (!operation_str.contains("=")) {
+                        tv1.append(temp_str);
+                    }
+                    operation_str = tv1.getText().toString();
+                    if(!operation_str.isEmpty() && temp_str.length() != 1) {
+                        String sub_s = operation_str.substring(operation_str.length() - 2, operation_str.length());
+                        if (sub_s.equals("/ ") || sub_s.equals("* ") || sub_s.equals("+ ") || sub_s.equals("- ")) {
+                            operation_str = operation_str.substring(0, operation_str.length() - 3);
+                        }
+                    }
+                    float fin_result = calculate(operation_str);
+                    float modulo = fin_result % 1;
                     if (modulo == 0.0) {
-                        int i_res = (int) result;
-                        str_result = String.valueOf(i_res);
-                        c_cnt = 0;
+                        if(fin_result > Integer.MAX_VALUE){
+                            str_result = String.valueOf(fin_result);
+                        }else{
+                            int res = (int) fin_result;
+                            str_result = String.valueOf(res);
+                        }
                     } else {
-                        str_result = String.valueOf(result);
-                        c_cnt = 0;
+                        str_result = String.valueOf(fin_result);
                     }
-                    tv.setText(str_result);
-                    //str_result = "0";
-                    last_op = "=";
+                    if(!operation_str.contains("=")) {
+                        operation_str = operation_str + " = " + str_result;
+                        tv1.setText(operation_str);
+                        tv.setText(str_result);
+                    }
+                    c_cnt = 0;
                     btn_c.setText("C");
+
+                } else {
+                        zeroDiv();
                 }
+                }
+                vtext = tv.getText().toString();
+                v1text = tv1.getText().toString();
             }
         });
-
-        //public void basicOperations(){
-        //}
-
     }
-/*
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString(STATE_USER, mUser);
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }*/
 
+    public void zeroDiv(){
+        Context context = getApplicationContext();
+        CharSequence text = "Do not divide by zero";
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+public Float calculate(String op_string)
+{
+    String[] op_arr;
+    op_arr = op_string.split("\\s+");
+
+    Stack<Float> numbers = new Stack<Float>();
+    Stack<String> operators = new Stack<String>();
+
+    boolean flag = false;
+    for (int i = 0; i < op_arr.length; i++){
+        if(isNumeric(op_arr[i])){
+            String snum = op_arr[i];
+            numbers.push(Float.parseFloat(snum));
+        }
+        else{
+
+            while (!operators.empty() &&
+                    operationPriority(op_arr[i],
+                            operators.peek()))
+                numbers.push(operationResult(operators.pop(),
+                        numbers.pop(),
+                        numbers.pop()));
+
+            operators.push(op_arr[i]);
+        }
+    }
+
+    while (!operators.empty())
+        numbers.push(operationResult(operators.pop(),
+                numbers.pop(),
+                numbers.pop()));
+
+    return numbers.pop();
+}
+
+    private static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean operationPriority(
+            String op1, String op2)
+    {
+        if ((op1.equals("*") || op1.equals("/")) &&
+                (op2.equals("+") || op2.equals("-")))
+            return false;
+        else
+            return true;
+    }
+
+
+    public float operationResult(String op,
+                                 Float b, Float a)
+    {
+        switch (op)
+        {
+            case "+":
+                return a + b;
+            case "-":
+                return a - b;
+            case "*":
+                return a * b;
+            case "/":
+                if (b == 0) {
+                    throw new
+                            UnsupportedOperationException(
+                            "Cannot divide by zero");
+                }
+                return a / b;
+        }
+        return 0;
+    }
 }
